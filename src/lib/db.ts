@@ -12,7 +12,7 @@ async function createDb() {
 
   const storage = wrappedValidateAjvStorage({ storage: getRxStorageDexie() })
 
-  // Collections are added here once domain schemas land in packages/shared.
+  // Collections are added here once domain schemas exist for this app.
   return createRxDatabase({
     name: 'imperiobeds',
     storage,

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
-import { AppHeader } from '@/components/app-header'
+import { createFileRoute, Outlet, redirect, useNavigate } from '@tanstack/react-router'
+import { AppSidebar } from '@/components/app-sidebar'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { useMyHotelAccess } from '@/hooks/use-hotel-access'
 import { authClient } from '@/lib/auth-client'
 import { useCurrentHotelStore } from '@/stores/current-hotel'
@@ -17,9 +18,12 @@ export const Route = createFileRoute('/_authenticated')({
 })
 
 function AuthenticatedLayout() {
-  const { data: hotelAccess } = useMyHotelAccess()
+  const navigate = useNavigate()
+  const { data: hotelAccess, isLoading: isHotelAccessLoading } = useMyHotelAccess()
   const activeHotelId = useCurrentHotelStore((state) => state.activeHotelId)
   const setActiveHotelId = useCurrentHotelStore((state) => state.setActiveHotelId)
+
+  const hasNoHotelAccess = !isHotelAccessLoading && hotelAccess?.length === 0
 
   // Nothing else ever sets activeHotelId — default to the first available
   // hotel once we know what the user can access (most users only have one).
@@ -29,12 +33,25 @@ function AuthenticatedLayout() {
     }
   }, [activeHotelId, hotelAccess, setActiveHotelId])
 
+  // A user with zero hotel access (brand-new owner, or an invite that never
+  // landed) has nothing to do in the app shell — send them to set up their
+  // first hotel instead of rendering an empty dashboard.
+  useEffect(() => {
+    if (hasNoHotelAccess) {
+      navigate({ to: '/onboarding' })
+    }
+  }, [hasNoHotelAccess, navigate])
+
+  if (hasNoHotelAccess) {
+    return null
+  }
+
   return (
-    <div className="flex min-h-svh flex-col">
-      <AppHeader />
-      <main className="flex-1">
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
         <Outlet />
-      </main>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }

@@ -18,10 +18,32 @@ export type Role = z.infer<typeof roleSchema>
 
 export const invitableRoleSchema = roleSchema.exclude(['owner_admin'])
 
+// Duplicated from the server's src/schemas/hotel.schema.ts and payment.schema.ts.
+export const TOTAL_ROOMS_RANGES = ['1-20', '21-50', '51-100', '100+'] as const
+
+export type TotalRoomsRange = (typeof TOTAL_ROOMS_RANGES)[number]
+
+export const CURRENCIES = ['NGN', 'USD', 'GHS', 'KES'] as const
+
+export type Currency = (typeof CURRENCIES)[number]
+
+export const PAYMENT_METHODS = ['cash', 'transfer', 'pos'] as const
+
+export type PaymentMethod = (typeof PAYMENT_METHODS)[number]
+
 export const hotelSchema = z.object({
   id: z.string(),
   name: z.string().min(1),
   ownerId: z.string(),
+  totalRoomsRange: z.enum(TOTAL_ROOMS_RANGES).nullable(),
+  address: z.string().nullable(),
+  city: z.string().nullable(),
+  state: z.string().nullable(),
+  starRating: z.number().int().min(1).max(5).nullable(),
+  checkOutTime: z.string().nullable(),
+  description: z.string().nullable(),
+  currency: z.enum(CURRENCIES).nullable(),
+  paymentMethods: z.array(z.enum(PAYMENT_METHODS)),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })
@@ -30,6 +52,15 @@ export type Hotel = z.infer<typeof hotelSchema>
 
 export const createHotelSchema = z.object({
   name: z.string().min(1),
+  totalRoomsRange: z.enum(TOTAL_ROOMS_RANGES).optional(),
+  address: z.string().min(1).optional(),
+  city: z.string().min(1).optional(),
+  state: z.string().min(1).optional(),
+  starRating: z.number().int().min(1).max(5).optional(),
+  checkOutTime: z.string().min(1).optional(),
+  description: z.string().min(1).optional(),
+  currency: z.enum(CURRENCIES).optional(),
+  paymentMethods: z.array(z.enum(PAYMENT_METHODS)).optional(),
 })
 
 export type CreateHotelInput = z.infer<typeof createHotelSchema>

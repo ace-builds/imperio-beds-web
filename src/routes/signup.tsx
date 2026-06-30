@@ -7,25 +7,27 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-const loginSearchSchema = z.object({
+const signupSearchSchema = z.object({
   redirect: z.string().optional(),
+  email: z.email().optional(),
 })
 
-export const Route = createFileRoute('/login')({
-  validateSearch: loginSearchSchema,
-  component: LoginPage,
+export const Route = createFileRoute('/signup')({
+  validateSearch: signupSearchSchema,
+  component: SignupPage,
 })
 
-function LoginPage() {
+function SignupPage() {
   const navigate = useNavigate()
-  const { redirect } = Route.useSearch()
-  const [email, setEmail] = useState('')
+  const { redirect, email: invitedEmail } = Route.useSearch()
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState(invitedEmail ?? '')
   const [password, setPassword] = useState('')
 
-  const loginMutation = useMutation({
+  const signupMutation = useMutation({
     mutationFn: async () => {
-      const { data, error } = await authClient.signIn.email({ email, password })
-      if (error) throw new Error(error.message ?? 'Unable to sign in')
+      const { data, error } = await authClient.signUp.email({ name, email, password })
+      if (error) throw new Error(error.message ?? 'Unable to create account')
       return data
     },
     onSuccess: () => {
@@ -40,9 +42,19 @@ function LoginPage() {
         className="flex w-full max-w-sm flex-col gap-4"
         onSubmit={(event) => {
           event.preventDefault()
-          loginMutation.mutate()
+          signupMutation.mutate()
         }}
       >
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="name">Name</Label>
+          <Input
+            id="name"
+            autoComplete="name"
+            required
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+          />
+        </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">Email</Label>
           <Input
@@ -59,22 +71,22 @@ function LoginPage() {
           <Input
             id="password"
             type="password"
-            autoComplete="current-password"
+            autoComplete="new-password"
             required
             value={password}
             onChange={(event) => setPassword(event.target.value)}
           />
         </div>
-        {loginMutation.isError && (
-          <p className="text-sm text-destructive">{loginMutation.error.message}</p>
+        {signupMutation.isError && (
+          <p className="text-sm text-destructive">{signupMutation.error.message}</p>
         )}
-        <Button type="submit" disabled={loginMutation.isPending}>
-          {loginMutation.isPending ? 'Signing in…' : 'Sign in'}
+        <Button type="submit" disabled={signupMutation.isPending}>
+          {signupMutation.isPending ? 'Creating account…' : 'Create account'}
         </Button>
         <p className="text-center text-sm text-muted-foreground">
-          Need an account?{' '}
-          <Link to="/signup" search={{ redirect }} className="underline">
-            Create one
+          Already have an account?{' '}
+          <Link to="/login" search={{ redirect }} className="underline">
+            Sign in
           </Link>
         </p>
       </form>

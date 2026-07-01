@@ -1,11 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Users } from 'lucide-react'
-import { AppTopbar } from '@/components/app-topbar'
-import { ComingSoon } from '@/components/coming-soon'
+import { createFileRoute } from "@tanstack/react-router";
+import { Users } from "lucide-react";
+import { AppTopbar } from "@/components/app-topbar";
+import { ComingSoon } from "@/components/coming-soon";
 
-export const Route = createFileRoute('/_authenticated/guests')({
+export const Route = createFileRoute("/_authenticated/guests")({
+  head: () => ({ meta: [{ title: "Guests — ImperioBed" }] }),
   component: GuestsPage,
-})
+});
 
 function GuestsPage() {
   return (
@@ -17,5 +18,5 @@ function GuestsPage() {
         description="Guest search and stay history land in Phase 3."
       />
     </div>
-  )
+  );
 }

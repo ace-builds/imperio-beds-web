@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -9,17 +9,18 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useCreateHotel, useMyHotels } from '@/hooks/use-hotels'
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useCreateHotel, useMyHotels } from "@/hooks/use-hotels";
 
-export const Route = createFileRoute('/_authenticated/hotels/')({
+export const Route = createFileRoute("/_authenticated/hotels/")({
+  head: () => ({ meta: [{ title: "Hotels — ImperioBed" }] }),
   component: HotelsPage,
-})
+});
 
 function HotelsPage() {
-  const { data: hotels, isLoading } = useMyHotels()
+  const { data: hotels, isLoading } = useMyHotels();
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-4 p-6">
@@ -38,7 +39,11 @@ function HotelsPage() {
 
       <div className="flex flex-col gap-2">
         {hotels?.map((hotel) => (
-          <Link key={hotel.id} to="/hotels/$hotelId" params={{ hotelId: hotel.id }}>
+          <Link
+            key={hotel.id}
+            to="/hotels/$hotelId"
+            params={{ hotelId: hotel.id }}
+          >
             <Card className="hover:bg-muted">
               <CardHeader>
                 <CardTitle>{hotel.name}</CardTitle>
@@ -48,13 +53,13 @@ function HotelsPage() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 function CreateHotelDialog() {
-  const [open, setOpen] = useState(false)
-  const [name, setName] = useState('')
-  const createHotel = useCreateHotel()
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState("");
+  const createHotel = useCreateHotel();
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -68,16 +73,16 @@ function CreateHotelDialog() {
         <form
           className="flex flex-col gap-4"
           onSubmit={(event) => {
-            event.preventDefault()
+            event.preventDefault();
             createHotel.mutate(
               { name },
               {
                 onSuccess: () => {
-                  setOpen(false)
-                  setName('')
+                  setOpen(false);
+                  setName("");
                 },
               },
-            )
+            );
           }}
         >
           <div className="flex flex-col gap-1.5">
@@ -90,15 +95,17 @@ function CreateHotelDialog() {
             />
           </div>
           {createHotel.isError && (
-            <p className="text-sm text-destructive">{createHotel.error.message}</p>
+            <p className="text-sm text-destructive">
+              {createHotel.error.message}
+            </p>
           )}
           <DialogFooter>
             <Button type="submit" disabled={createHotel.isPending}>
-              {createHotel.isPending ? 'Creating…' : 'Create'}
+              {createHotel.isPending ? "Creating…" : "Create"}
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

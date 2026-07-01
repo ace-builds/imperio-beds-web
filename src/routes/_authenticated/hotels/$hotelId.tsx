@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   useCancelInvite,
   useCreateInvite,
   useHotelStaff,
   useRemoveStaff,
-} from '@/hooks/use-hotels'
-import { invitableRoleSchema } from '@/lib/schemas/hotel'
+} from "@/hooks/use-hotels";
+import { invitableRoleSchema } from "@/lib/schemas/hotel";
 
-export const Route = createFileRoute('/_authenticated/hotels/$hotelId')({
+export const Route = createFileRoute("/_authenticated/hotels/$hotelId")({
+  head: () => ({ meta: [{ title: "Staff & Invites — ImperioBed" }] }),
   component: HotelDetailPage,
-})
+});
 
-const INVITABLE_ROLES = invitableRoleSchema.options
+const INVITABLE_ROLES = invitableRoleSchema.options;
 
 function HotelDetailPage() {
-  const { hotelId } = Route.useParams()
-  const { data, isLoading } = useHotelStaff(hotelId)
-  const removeStaff = useRemoveStaff(hotelId)
-  const cancelInvite = useCancelInvite(hotelId)
+  const { hotelId } = Route.useParams();
+  const { data, isLoading } = useHotelStaff(hotelId);
+  const removeStaff = useRemoveStaff(hotelId);
+  const cancelInvite = useCancelInvite(hotelId);
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-6 p-6">
@@ -41,7 +49,9 @@ function HotelDetailPage() {
 
       {data && data.staff.length > 0 && (
         <section className="flex flex-col gap-2">
-          <h2 className="text-sm font-medium text-muted-foreground">Current staff</h2>
+          <h2 className="text-sm font-medium text-muted-foreground">
+            Current staff
+          </h2>
           <Table>
             <TableHeader>
               <TableRow>
@@ -72,7 +82,9 @@ function HotelDetailPage() {
 
       {data && data.invites.length > 0 && (
         <section className="flex flex-col gap-2">
-          <h2 className="text-sm font-medium text-muted-foreground">Pending invites</h2>
+          <h2 className="text-sm font-medium text-muted-foreground">
+            Pending invites
+          </h2>
           <Table>
             <TableHeader>
               <TableRow>
@@ -103,23 +115,22 @@ function HotelDetailPage() {
         </section>
       )}
     </div>
-  )
+  );
 }
 
 function InviteStaffForm({ hotelId }: { hotelId: string }) {
-  const [email, setEmail] = useState('')
-  const [role, setRole] = useState<(typeof INVITABLE_ROLES)[number]>(INVITABLE_ROLES[0])
-  const createInvite = useCreateInvite(hotelId)
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState<(typeof INVITABLE_ROLES)[number]>(
+    INVITABLE_ROLES[0],
+  );
+  const createInvite = useCreateInvite(hotelId);
 
   return (
     <form
       className="flex flex-col gap-4 rounded-lg border p-4"
       onSubmit={(event) => {
-        event.preventDefault()
-        createInvite.mutate(
-          { email, role },
-          { onSuccess: () => setEmail('') },
-        )
+        event.preventDefault();
+        createInvite.mutate({ email, role }, { onSuccess: () => setEmail("") });
       }}
     >
       <h2 className="text-sm font-medium">Invite staff</h2>
@@ -136,7 +147,10 @@ function InviteStaffForm({ hotelId }: { hotelId: string }) {
         </div>
         <div className="flex flex-col gap-1.5">
           <Label>Role</Label>
-          <Select value={role} onValueChange={(value) => setRole(value as typeof role)}>
+          <Select
+            value={role}
+            onValueChange={(value) => setRole(value as typeof role)}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -154,8 +168,8 @@ function InviteStaffForm({ hotelId }: { hotelId: string }) {
         <p className="text-sm text-destructive">{createInvite.error.message}</p>
       )}
       <Button type="submit" disabled={createInvite.isPending}>
-        {createInvite.isPending ? 'Sending invite…' : 'Send invite'}
+        {createInvite.isPending ? "Sending invite…" : "Send invite"}
       </Button>
     </form>
-  )
+  );
 }

@@ -1,11 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { UserRound } from 'lucide-react'
-import { AppTopbar } from '@/components/app-topbar'
-import { ComingSoon } from '@/components/coming-soon'
+import { createFileRoute } from "@tanstack/react-router";
+import { UserRound } from "lucide-react";
+import { AppTopbar } from "@/components/app-topbar";
+import { ComingSoon } from "@/components/coming-soon";
 
-export const Route = createFileRoute('/_authenticated/staff')({
+export const Route = createFileRoute("/_authenticated/staff")({
+  head: () => ({ meta: [{ title: "Staff — ImperioBed" }] }),
   component: StaffPage,
-})
+});
 
 function StaffPage() {
   return (
@@ -17,5 +18,5 @@ function StaffPage() {
         description="Staff management is deferred post-MVP — this nav entry is a placeholder for now."
       />
     </div>
-  )
+  );
 }

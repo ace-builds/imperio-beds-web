@@ -1,48 +1,53 @@
-import { useState } from 'react'
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { useMutation } from '@tanstack/react-query'
-import { z } from 'zod'
-import { authClient } from '@/lib/auth-client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import { z } from "zod";
+import { authClient } from "@/lib/auth-client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const signupSearchSchema = z.object({
   redirect: z.string().optional(),
   email: z.email().optional(),
-})
+});
 
-export const Route = createFileRoute('/signup')({
+export const Route = createFileRoute("/signup")({
   validateSearch: signupSearchSchema,
+  head: () => ({ meta: [{ title: "Create account — ImperioBed" }] }),
   component: SignupPage,
-})
+});
 
 function SignupPage() {
-  const navigate = useNavigate()
-  const { redirect, email: invitedEmail } = Route.useSearch()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState(invitedEmail ?? '')
-  const [password, setPassword] = useState('')
+  const navigate = useNavigate();
+  const { redirect, email: invitedEmail } = Route.useSearch();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState(invitedEmail ?? "");
+  const [password, setPassword] = useState("");
 
   const signupMutation = useMutation({
     mutationFn: async () => {
-      const { data, error } = await authClient.signUp.email({ name, email, password })
-      if (error) throw new Error(error.message ?? 'Unable to create account')
-      return data
+      const { data, error } = await authClient.signUp.email({
+        name,
+        email,
+        password,
+      });
+      if (error) throw new Error(error.message ?? "Unable to create account");
+      return data;
     },
     onSuccess: () => {
-      navigate({ to: redirect ?? '/' })
+      navigate({ to: redirect ?? "/" });
     },
-  })
+  });
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6">
-      <h1 className="text-2xl font-semibold">imperiobeds</h1>
+      <h1 className="text-2xl font-semibold">ImperioBed</h1>
       <form
         className="flex w-full max-w-sm flex-col gap-4"
         onSubmit={(event) => {
-          event.preventDefault()
-          signupMutation.mutate()
+          event.preventDefault();
+          signupMutation.mutate();
         }}
       >
         <div className="flex flex-col gap-1.5">
@@ -78,18 +83,20 @@ function SignupPage() {
           />
         </div>
         {signupMutation.isError && (
-          <p className="text-sm text-destructive">{signupMutation.error.message}</p>
+          <p className="text-sm text-destructive">
+            {signupMutation.error.message}
+          </p>
         )}
         <Button type="submit" disabled={signupMutation.isPending}>
-          {signupMutation.isPending ? 'Creating account…' : 'Create account'}
+          {signupMutation.isPending ? "Creating account…" : "Create account"}
         </Button>
         <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{' '}
+          Already have an account?{" "}
           <Link to="/login" search={{ redirect }} className="underline">
             Sign in
           </Link>
         </p>
       </form>
     </div>
-  )
+  );
 }

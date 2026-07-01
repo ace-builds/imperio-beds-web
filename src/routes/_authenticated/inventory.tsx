@@ -1,11 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Package } from 'lucide-react'
-import { AppTopbar } from '@/components/app-topbar'
-import { ComingSoon } from '@/components/coming-soon'
+import { createFileRoute } from "@tanstack/react-router";
+import { Package } from "lucide-react";
+import { AppTopbar } from "@/components/app-topbar";
+import { ComingSoon } from "@/components/coming-soon";
 
-export const Route = createFileRoute('/_authenticated/inventory')({
+export const Route = createFileRoute("/_authenticated/inventory")({
+  head: () => ({ meta: [{ title: "Inventory — ImperioBed" }] }),
   component: InventoryPage,
-})
+});
 
 function InventoryPage() {
   return (
@@ -17,5 +18,5 @@ function InventoryPage() {
         description="Stock tracking and stock-in/stock-out forms land in Phase 4."
       />
     </div>
-  )
+  );
 }

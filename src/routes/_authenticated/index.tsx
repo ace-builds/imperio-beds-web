@@ -1,19 +1,26 @@
-import { useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
-import { AppTopbar } from '@/components/app-topbar'
-import { DatePicker } from '@/components/date-picker'
-import { ActivityFeedCard } from '@/components/dashboard/activity-feed-card'
-import { RoomStatusCard } from '@/components/dashboard/room-status-card'
-import { StaffShiftCard } from '@/components/dashboard/staff-shift-card'
-import { StatCard } from '@/components/dashboard/stat-card'
-import { ACTIVITY_FEED, ARRIVALS, MORNING_SHIFT, ROOM_STATUS_SEGMENTS, STATS } from '@/components/dashboard/mock-data'
+import { useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { AppTopbar } from "@/components/app-topbar";
+import { DatePicker } from "@/components/date-picker";
+import { ActivityFeedCard } from "@/components/dashboard/activity-feed-card";
+import { RoomStatusCard } from "@/components/dashboard/room-status-card";
+import { StaffShiftCard } from "@/components/dashboard/staff-shift-card";
+import { StatCard } from "@/components/dashboard/stat-card";
+import {
+  ACTIVITY_FEED,
+  ARRIVALS,
+  MORNING_SHIFT,
+  ROOM_STATUS_SEGMENTS,
+  STATS,
+} from "@/components/dashboard/mock-data";
 
-export const Route = createFileRoute('/_authenticated/')({
+export const Route = createFileRoute("/_authenticated/")({
+  head: () => ({ meta: [{ title: "Dashboard — ImperioBed" }] }),
   component: DashboardPage,
-})
+});
 
 function DashboardPage() {
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(new Date());
 
   return (
     <div className="flex flex-1 flex-col">
@@ -30,11 +37,14 @@ function DashboardPage() {
 
         <div className="grid gap-4 lg:grid-cols-3">
           <RoomStatusCard segments={ROOM_STATUS_SEGMENTS} arrivals={ARRIVALS} />
-          <StaffShiftCard title="Staff on Shift (Morning)" staff={MORNING_SHIFT} />
+          <StaffShiftCard
+            title="Staff on Shift (Morning)"
+            staff={MORNING_SHIFT}
+          />
         </div>
 
         <ActivityFeedCard activity={ACTIVITY_FEED} />
       </div>
     </div>
-  )
+  );
 }

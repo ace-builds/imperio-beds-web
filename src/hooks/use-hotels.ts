@@ -10,9 +10,17 @@ import {
   updateHotel,
 } from '@/lib/api/hotels'
 import type { CreateHotelInput, CreateInviteInput } from '@/lib/schemas/hotel'
+import { useCurrentHotelStore } from '@/stores/current-hotel'
 
 export function useMyHotels() {
   return useQuery({ queryKey: ['hotels'], queryFn: listMyHotels })
+}
+
+export function useActiveHotel() {
+  const activeHotelId = useCurrentHotelStore((state) => state.activeHotelId)
+  const { data: hotels, isLoading } = useMyHotels()
+  const hotel = hotels?.find((item) => item.id === activeHotelId)
+  return { hotel, isLoading }
 }
 
 export function useCreateHotel() {

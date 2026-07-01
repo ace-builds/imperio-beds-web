@@ -1,11 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Settings } from 'lucide-react'
-import { AppTopbar } from '@/components/app-topbar'
-import { ComingSoon } from '@/components/coming-soon'
+import { createFileRoute } from "@tanstack/react-router";
+import { Settings } from "lucide-react";
+import { AppTopbar } from "@/components/app-topbar";
+import { ComingSoon } from "@/components/coming-soon";
 
-export const Route = createFileRoute('/_authenticated/settings')({
+export const Route = createFileRoute("/_authenticated/settings")({
+  head: () => ({ meta: [{ title: "Settings — ImperioBed" }] }),
   component: SettingsPage,
-})
+});
 
 function SettingsPage() {
   return (
@@ -17,5 +18,5 @@ function SettingsPage() {
         description="Hotel and account settings aren't built yet."
       />
     </div>
-  )
+  );
 }

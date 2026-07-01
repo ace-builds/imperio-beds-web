@@ -1,11 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Wallet } from 'lucide-react'
-import { AppTopbar } from '@/components/app-topbar'
-import { ComingSoon } from '@/components/coming-soon'
+import { createFileRoute } from "@tanstack/react-router";
+import { Wallet } from "lucide-react";
+import { AppTopbar } from "@/components/app-topbar";
+import { ComingSoon } from "@/components/coming-soon";
 
-export const Route = createFileRoute('/_authenticated/payroll')({
+export const Route = createFileRoute("/_authenticated/payroll")({
+  head: () => ({ meta: [{ title: "Payroll — ImperioBed" }] }),
   component: PayrollPage,
-})
+});
 
 function PayrollPage() {
   return (
@@ -17,5 +18,5 @@ function PayrollPage() {
         description="Payroll & salary management is deferred post-MVP — this nav entry is a placeholder for now."
       />
     </div>
-  )
+  );
 }

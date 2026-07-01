@@ -5,6 +5,7 @@ import type {
   InventoryCategory,
   InventoryItem,
   InventoryMovement,
+  InventoryStats,
   StockInInput,
   StockOutInput,
   UpdateItemInput,
@@ -70,6 +71,12 @@ export function deleteItem(hotelId: string, itemId: string) {
     method: 'DELETE',
     hotelId,
   })
+}
+
+// ── Stats ────────────────────────────────────────────────────────────────────
+
+export function getInventoryStats(hotelId: string) {
+  return apiFetch<InventoryStats>(`/hotels/${hotelId}/inventory/stats`, { hotelId })
 }
 
 // ── Movements ────────────────────────────────────────────────────────────────

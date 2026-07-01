@@ -31,6 +31,7 @@ import { useReservations } from "@/hooks/use-reservations";
 import { useRooms } from "@/hooks/use-rooms";
 import { useStays } from "@/hooks/use-stays";
 import { canAccess } from "@/lib/roles";
+import { cn } from "@/lib/utils";
 import { useCurrentHotelStore } from "@/stores/current-hotel";
 
 export const Route = createFileRoute("/_authenticated/")({
@@ -171,7 +172,7 @@ function DashboardPage() {
           ))}
         </div>
 
-        <div className={`grid gap-4 ${staffShift ? "lg:grid-cols-3" : ""}`}>
+        <div className={cn("grid gap-4", staffShift && "lg:grid-cols-3")}>
           <RoomStatusCard
             segments={buildOccupancySegments(occupancy)}
             arrivals={arrivals}

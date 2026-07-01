@@ -77,3 +77,13 @@ export const stockOutSchema = z.object({
   reason: z.string().min(1, 'Reason is required'),
 })
 export type StockOutInput = z.infer<typeof stockOutSchema>
+
+export const inventoryStatsSchema = z.object({
+  totalItems: z.number(),
+  categoriesCount: z.number(),
+  lowStockCount: z.number(),
+  outOfStockCount: z.number(),
+  valueInStock: z.number(),
+  valueChangePct: z.number().nullable(),
+})
+export type InventoryStats = z.infer<typeof inventoryStatsSchema>

@@ -1,11 +1,16 @@
 import { formatDistanceToNowStrict } from 'date-fns'
 import type { Currency } from '@/lib/schemas/hotel'
 
-export function formatMoney(amount: number, currency: Currency | null | undefined) {
+export function formatMoney(
+  amount: number,
+  currency: Currency | null | undefined,
+  options?: { compact?: boolean },
+) {
   return new Intl.NumberFormat('en-NG', {
     style: 'currency',
     currency: currency ?? 'NGN',
-    maximumFractionDigits: 0,
+    maximumFractionDigits: options?.compact ? 1 : 0,
+    notation: options?.compact ? 'compact' : 'standard',
   }).format(amount)
 }
 

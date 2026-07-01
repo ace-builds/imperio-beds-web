@@ -34,8 +34,11 @@ export type NavItem = {
 // Phase 2+ adds more entries as their modules ship — this is infrastructure,
 // not a security boundary: the server's HotelAccessGuard is what actually
 // enforces access, this just keeps the nav from showing links a role can't use.
-// Staff and Payroll are deferred post-MVP (see root CLAUDE.md) — they render
-// as static nav entries ahead of their modules actually existing.
+// Payroll is still deferred post-MVP (see root CLAUDE.md) — it renders as a
+// static nav entry ahead of its module actually existing. Staff shipped: its
+// roles are 'owner_admin' only because every /hotels/:id/staff/* route is
+// gated to the literal hotel owner (see HotelsController) — not the wider
+// manager access some other modules allow.
 export const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', to: '/', icon: LayoutGrid, section: 'main', roles: 'any' },
   {
@@ -72,7 +75,7 @@ export const NAV_ITEMS: NavItem[] = [
     to: '/staff',
     icon: UserRound,
     section: 'operations',
-    roles: ['owner_admin', 'manager'],
+    roles: ['owner_admin'],
   },
   {
     label: 'Payroll',

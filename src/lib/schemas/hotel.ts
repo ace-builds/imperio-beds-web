@@ -80,16 +80,47 @@ export const createInviteSchema = z.object({
 
 export type CreateInviteInput = z.infer<typeof createInviteSchema>
 
+export const STAFF_STATUSES = ['active', 'suspended'] as const
+
+export const staffStatusSchema = z.enum(STAFF_STATUSES)
+
+export type StaffStatus = z.infer<typeof staffStatusSchema>
+
 export const hotelStaffSchema = z.object({
   id: z.string(),
   userId: z.string(),
   hotelId: z.string(),
   role: roleSchema,
+  phone: z.string().nullable(),
+  status: staffStatusSchema,
+  onDuty: z.boolean(),
+  lastActiveAt: z.coerce.date().nullable(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })
 
 export type HotelStaff = z.infer<typeof hotelStaffSchema>
+
+// What GET /hotels/:id/staff actually returns — HotelStaff enriched with the
+// linked User's profile, since the table needs a name/email/avatar to render.
+export const hotelStaffWithUserSchema = hotelStaffSchema.extend({
+  user: z.object({
+    id: z.string(),
+    name: z.string(),
+    email: z.email(),
+    image: z.string().nullable(),
+  }),
+})
+
+export type HotelStaffWithUser = z.infer<typeof hotelStaffWithUserSchema>
+
+export const updateStaffSchema = z.object({
+  role: invitableRoleSchema.optional(),
+  status: staffStatusSchema.optional(),
+  phone: z.string().min(1).nullable().optional(),
+})
+
+export type UpdateStaffInput = z.infer<typeof updateStaffSchema>
 
 export const hotelInviteSchema = z.object({
   id: z.string(),

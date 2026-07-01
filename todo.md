@@ -13,6 +13,7 @@ The desktop front-desk client's slice of [implementation.md](../implementation.m
 - [x] Hotel management screen (create/edit hotel, owner only)
 - [x] Hotel switcher UI
 - [x] Role-gated navigation (hide/disable modules the current role can't access)
+- [x] Staff Management screen (`/staff`, owner_admin only) — roster (name/avatar/role/phone/status/shift), search + role filter, invite-based "Add Staff Member" flow, edit role/phone/status, suspend/reactivate, on-duty toggle, remove, pending-invite rows with cancel (2026-07-01, shipped ahead of `implementation.md`'s original phasing)
 
 ## Phase 2 — Rooms & Room Types
 
@@ -24,7 +25,7 @@ The desktop front-desk client's slice of [implementation.md](../implementation.m
 ## Phase 3 — Guests & Front Desk
 
 - [x] RxDB `guests` and `stays` collections
-- [ ] Guest search (name/phone) + profile/stay-history view — `routes/_authenticated/guests.tsx` is still a stub; only the inline `GuestPicker` search widget exists (used by the walk-in/reservation dialogs), not a standalone guest profile/history screen
+- [x] Guest search (name/phone) + profile/stay-history view — `routes/_authenticated/guests.tsx` now lists guests (RxDB-backed search/stats joined against `stays`) with a detail sheet (`guest-detail-sheet.tsx`, REST via `useGuest`) showing stay history and notes; add/edit guest dialog and add-note form are wired to existing/new hooks
 - [x] Check-in flow (assign room to guest)
 - [x] Extend stay / move room flows (now RxDB-backed — optimistic local writes, offline-capable; check-in/check-out stay REST-only, see server's `todo.md` Phase 8 note)
 - [x] Check-out flow
@@ -61,4 +62,4 @@ The desktop front-desk client's slice of [implementation.md](../implementation.m
 
 ---
 
-Deferred post-MVP, not tracked here yet: Staff Management, Attendance & Shift Tracking, Payroll & Salary Management screens.
+Deferred post-MVP, not tracked here yet: full Attendance & Shift Tracking UI, Payroll & Salary Management screens. Staff Management shipped 2026-07-01 — see Phase 1 above.

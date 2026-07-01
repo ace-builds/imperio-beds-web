@@ -7,9 +7,11 @@ import {
   listMyHotels,
   listStaffAndInvites,
   removeStaff,
+  setStaffOnDuty,
   updateHotel,
+  updateStaff,
 } from '@/lib/api/hotels'
-import type { CreateHotelInput, CreateInviteInput } from '@/lib/schemas/hotel'
+import type { CreateHotelInput, CreateInviteInput, UpdateStaffInput } from '@/lib/schemas/hotel'
 import { useCurrentHotelStore } from '@/stores/current-hotel'
 
 export function useMyHotels() {
@@ -68,6 +70,28 @@ export function useCreateInvite(hotelId: string) {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: (input: CreateInviteInput) => createInvite(hotelId, input),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['hotels', hotelId, 'staff'] })
+    },
+  })
+}
+
+export function useUpdateStaff(hotelId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ staffId, input }: { staffId: string; input: UpdateStaffInput }) =>
+      updateStaff(hotelId, staffId, input),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['hotels', hotelId, 'staff'] })
+    },
+  })
+}
+
+export function useSetStaffOnDuty(hotelId: string) {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ staffId, onDuty }: { staffId: string; onDuty: boolean }) =>
+      setStaffOnDuty(hotelId, staffId, onDuty),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['hotels', hotelId, 'staff'] })
     },

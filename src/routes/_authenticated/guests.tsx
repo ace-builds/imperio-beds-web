@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Users } from "lucide-react";
 import { AppTopbar } from "@/components/app-topbar";
-import { ComingSoon } from "@/components/coming-soon";
+import { GuestsTable } from "@/components/guests/guests-table";
+import { useActiveHotelRole } from "@/hooks/use-active-hotel-role";
+import { useCurrentHotelStore } from "@/stores/current-hotel";
 
 export const Route = createFileRoute("/_authenticated/guests")({
   head: () => ({ meta: [{ title: "Guests — ImperioBed" }] }),
@@ -9,14 +10,18 @@ export const Route = createFileRoute("/_authenticated/guests")({
 });
 
 function GuestsPage() {
+  const activeHotelId = useCurrentHotelStore((state) => state.activeHotelId);
+  const { role } = useActiveHotelRole();
+  const canManage = role === "owner_admin" || role === "manager";
+
+  if (!activeHotelId) return null;
+
   return (
     <div className="flex flex-1 flex-col">
       <AppTopbar title="Guests" />
-      <ComingSoon
-        icon={Users}
-        title="Guests"
-        description="Guest search and stay history land in Phase 3."
-      />
+      <div className="flex flex-col gap-4 p-4 lg:p-6">
+        <GuestsTable hotelId={activeHotelId} canManage={canManage} />
+      </div>
     </div>
   );
 }

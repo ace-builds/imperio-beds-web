@@ -2,6 +2,8 @@ import {
   BedDouble,
   Building2,
   Calendar,
+  CalendarRange,
+  History,
   LayoutGrid,
   LineChart,
   Package,
@@ -52,6 +54,13 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['owner_admin', 'manager', 'front_desk'],
   },
   {
+    label: 'Calendar',
+    to: '/calendar',
+    icon: CalendarRange,
+    section: 'main',
+    roles: ['owner_admin', 'manager', 'front_desk'],
+  },
+  {
     label: 'Inventory',
     to: '/inventory',
     icon: Package,
@@ -80,5 +89,12 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['owner_admin', 'manager', 'accountant'],
   },
   { label: 'Hotels', to: '/hotels', icon: Building2, section: 'admin', roles: ['owner_admin'] },
+  {
+    label: 'Audit Log',
+    to: '/audit-logs',
+    icon: History,
+    section: 'admin',
+    roles: ['owner_admin'],
+  },
   { label: 'Settings', to: '/settings', icon: Settings, section: 'admin', roles: ['owner_admin'] },
 ]

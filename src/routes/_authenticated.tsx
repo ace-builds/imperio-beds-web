@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { createFileRoute, Outlet, redirect, useNavigate } from '@tanstack/react-router'
 import { AppSidebar } from '@/components/app-sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { useHotelReplication } from '@/hooks/use-hotel-replication'
 import { useMyHotelAccess } from '@/hooks/use-hotel-access'
 import { authClient } from '@/lib/auth-client'
 import { useCurrentHotelStore } from '@/stores/current-hotel'
@@ -22,6 +23,8 @@ function AuthenticatedLayout() {
   const { data: hotelAccess, isLoading: isHotelAccessLoading } = useMyHotelAccess()
   const activeHotelId = useCurrentHotelStore((state) => state.activeHotelId)
   const setActiveHotelId = useCurrentHotelStore((state) => state.setActiveHotelId)
+
+  useHotelReplication(activeHotelId)
 
   const hasNoHotelAccess = !isHotelAccessLoading && hotelAccess?.length === 0
 

@@ -13,7 +13,6 @@ import { StayDetailSheet } from "@/components/front-desk/stay-detail-sheet";
 import { TodaysLedger } from "@/components/front-desk/todays-ledger";
 import { useAddRoomNote, useRooms } from "@/hooks/use-rooms";
 import { useStays } from "@/hooks/use-stays";
-import { useRoomStatusSocket } from "@/hooks/use-room-status-socket";
 import { useCurrentHotelStore } from "@/stores/current-hotel";
 import type { RoomWithDetails } from "@/lib/schemas/room";
 import type { StayWithGuestRoom } from "@/lib/schemas/stay";
@@ -34,8 +33,6 @@ function FrontDeskPage() {
   const [moveOpen, setMoveOpen] = useState(false);
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [noteRoom, setNoteRoom] = useState<RoomWithDetails | null>(null);
-
-  useRoomStatusSocket(activeHotelId ?? "");
 
   const { data: rooms } = useRooms(activeHotelId ?? "");
   const { data: activeStays } = useStays(activeHotelId ?? "", "active");

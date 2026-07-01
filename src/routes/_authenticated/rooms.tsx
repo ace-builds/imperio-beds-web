@@ -4,7 +4,6 @@ import { RoomsTab } from "@/components/rooms/rooms-tab";
 import { RoomTypesTab } from "@/components/rooms/room-types-tab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useActiveHotelRole } from "@/hooks/use-active-hotel-role";
-import { useRoomStatusSocket } from "@/hooks/use-room-status-socket";
 import { useCurrentHotelStore } from "@/stores/current-hotel";
 
 export const Route = createFileRoute("/_authenticated/rooms")({
@@ -16,8 +15,6 @@ function RoomsPage() {
   const activeHotelId = useCurrentHotelStore((state) => state.activeHotelId);
   const { role } = useActiveHotelRole();
   const canManage = role === "owner_admin" || role === "manager";
-
-  useRoomStatusSocket(activeHotelId ?? "");
 
   if (!activeHotelId) return null;
 

@@ -31,6 +31,12 @@ export const PAYMENT_METHODS = ['cash', 'transfer', 'pos'] as const
 
 export type PaymentMethod = (typeof PAYMENT_METHODS)[number]
 
+// Duplicated from the server's src/schemas/hotel.schema.ts — one representative
+// IANA zone per currency this MVP supports, plus UTC as a neutral fallback.
+export const TIMEZONES = ['Africa/Lagos', 'Africa/Accra', 'Africa/Nairobi', 'UTC'] as const
+
+export type Timezone = (typeof TIMEZONES)[number]
+
 export const hotelSchema = z.object({
   id: z.string(),
   name: z.string().min(1),
@@ -44,6 +50,10 @@ export const hotelSchema = z.object({
   description: z.string().nullable(),
   currency: z.enum(CURRENCIES).nullable(),
   paymentMethods: z.array(z.enum(PAYMENT_METHODS)),
+  phone: z.string().nullable(),
+  email: z.email().nullable(),
+  website: z.string().nullable(),
+  timezone: z.enum(TIMEZONES).nullable(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })
@@ -61,6 +71,10 @@ export const createHotelSchema = z.object({
   description: z.string().min(1).optional(),
   currency: z.enum(CURRENCIES).optional(),
   paymentMethods: z.array(z.enum(PAYMENT_METHODS)).optional(),
+  phone: z.string().min(1).optional(),
+  email: z.email().optional(),
+  website: z.string().min(1).optional(),
+  timezone: z.enum(TIMEZONES).optional(),
 })
 
 export type CreateHotelInput = z.infer<typeof createHotelSchema>

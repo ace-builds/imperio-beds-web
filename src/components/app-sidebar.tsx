@@ -28,7 +28,6 @@ export function AppSidebar() {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   });
-  console.log(role, pathname);
 
   return (
     <Sidebar collapsible="icon">

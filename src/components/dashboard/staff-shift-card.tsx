@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -12,6 +13,11 @@ function initials(name: string) {
     .join('')
 }
 
+function formatLastActive(date: Date | null) {
+  if (!date) return 'Not active yet'
+  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+}
+
 export function StaffShiftCard({
   title,
   staff,
@@ -24,12 +30,15 @@ export function StaffShiftCard({
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardAction>
-          <Button variant="outline" size="sm">
-            View Roster
+          <Button variant="outline" size="sm" asChild>
+            <Link to="/staff">View Roster</Link>
           </Button>
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col divide-y">
+        {staff.length === 0 && (
+          <p className="py-2.5 text-sm text-muted-foreground">No staff on record yet.</p>
+        )}
         {staff.map((member) => (
           <div key={member.id} className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
             <Avatar>
@@ -40,8 +49,8 @@ export function StaffShiftCard({
               <span className="text-sm font-medium">{member.name}</span>
               <span className="text-xs text-muted-foreground">{member.role}</span>
             </div>
-            <Badge variant={member.late ? 'destructive' : 'success'}>
-              {member.late ? `Late (${member.time})` : member.time}
+            <Badge variant={member.onDuty ? 'success' : 'secondary'}>
+              {member.onDuty ? `On Duty (${formatLastActive(member.lastActiveAt)})` : 'Off Duty'}
             </Badge>
           </div>
         ))}

@@ -26,8 +26,8 @@ export type StaffShiftEntry = {
   name: string
   role: string
   avatarUrl?: string
-  time: string
-  late: boolean
+  onDuty: boolean
+  lastActiveAt: Date | null
 }
 
 export type ActivityEntry = {
@@ -36,5 +36,5 @@ export type ActivityEntry = {
   tone: Tone
   title: string
   actor: string
-  timeAgo: string
+  createdAt: Date
 }

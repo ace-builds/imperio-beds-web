@@ -1,8 +1,14 @@
-import { AlertTriangle, BedDouble, DollarSign, PackageOpen, TrendingUp } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
+import {
+  AlertTriangle,
+  BedDouble,
+  DollarSign,
+  PackageOpen,
+  TrendingUp,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -10,24 +16,30 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import type { DailyReport } from '@/lib/schemas/report'
+} from "@/components/ui/table";
+import type { DailyReport } from "@/lib/schemas/report";
 
 function formatCurrency(amount: number) {
-  return new Intl.NumberFormat('en-NG', {
-    style: 'currency',
-    currency: 'NGN',
+  return new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
     maximumFractionDigits: 0,
-  }).format(amount)
+  }).format(amount);
 }
 
-function formatTime(date: Date | null) {
-  if (!date) return '—'
-  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+function formatTime(date: Date | string | null) {
+  if (!date) return "—";
+  if (typeof date === "string") {
+    date = new Date(date);
+  }
+  return date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 export function DailyReportView({ report }: { report: DailyReport }) {
-  const { occupancy, revenue, checkIns, checkOuts, inventoryUsage } = report
+  const { occupancy, revenue, checkIns, checkOuts, inventoryUsage } = report;
 
   return (
     <div className="flex flex-col gap-6 print:gap-4">
@@ -111,10 +123,13 @@ export function DailyReportView({ report }: { report: DailyReport }) {
       <section>
         <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           <PackageOpen className="size-4 print:hidden" />
-          Inventory Usage Today ({inventoryUsage.length} item{inventoryUsage.length !== 1 ? 's' : ''})
+          Inventory Usage Today ({inventoryUsage.length} item
+          {inventoryUsage.length !== 1 ? "s" : ""})
         </h2>
         {inventoryUsage.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No inventory movements today.</p>
+          <p className="text-sm text-muted-foreground">
+            No inventory movements today.
+          </p>
         ) : (
           <div className="rounded-md border">
             <Table>
@@ -129,7 +144,9 @@ export function DailyReportView({ report }: { report: DailyReport }) {
               <TableBody>
                 {inventoryUsage.map((row) => (
                   <TableRow key={row.itemId}>
-                    <TableCell className="font-medium">{row.itemName}</TableCell>
+                    <TableCell className="font-medium">
+                      {row.itemName}
+                    </TableCell>
                     <TableCell className="text-right tabular-nums">
                       {row.quantityUsed} {row.unit}
                     </TableCell>
@@ -154,7 +171,7 @@ export function DailyReportView({ report }: { report: DailyReport }) {
         )}
       </section>
     </div>
-  )
+  );
 }
 
 function StatCard({
@@ -163,39 +180,41 @@ function StatCard({
   highlight,
   warn,
 }: {
-  label: string
-  value: string
-  highlight?: boolean
-  warn?: boolean
+  label: string;
+  value: string;
+  highlight?: boolean;
+  warn?: boolean;
 }) {
   return (
-    <Card className={warn ? 'border-destructive/40' : ''}>
+    <Card className={warn ? "border-destructive/40" : ""}>
       <CardHeader className="pb-1 pt-3">
-        <CardTitle className="text-xs font-medium text-muted-foreground">{label}</CardTitle>
+        <CardTitle className="text-xs font-medium text-muted-foreground">
+          {label}
+        </CardTitle>
       </CardHeader>
       <CardContent className="pb-3">
         <p
           className={`text-xl font-bold tabular-nums ${
             highlight
-              ? 'text-foreground'
+              ? "text-foreground"
               : warn
-                ? 'text-destructive'
-                : 'text-foreground'
+                ? "text-destructive"
+                : "text-foreground"
           }`}
         >
           {value}
         </p>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function StayTable({
   stays,
   timeKey,
 }: {
-  stays: DailyReport['checkIns']
-  timeKey: 'checkInAt' | 'checkOutAt'
+  stays: DailyReport["checkIns"];
+  timeKey: "checkInAt" | "checkOutAt";
 }) {
   return (
     <div className="rounded-md border">
@@ -215,14 +234,18 @@ function StayTable({
               <TableCell className="font-medium">{stay.guestName}</TableCell>
               <TableCell>{stay.roomNumber}</TableCell>
               <TableCell className="text-muted-foreground">
-                {formatTime(timeKey === 'checkInAt' ? stay.checkInAt : stay.checkOutAt)}
+                {formatTime(
+                  timeKey === "checkInAt" ? stay.checkInAt : stay.checkOutAt,
+                )}
               </TableCell>
               <TableCell className="text-right tabular-nums">
                 {formatCurrency(stay.totalPaid)}
               </TableCell>
               <TableCell className="text-right tabular-nums">
                 {stay.balance > 0 ? (
-                  <span className="text-destructive">{formatCurrency(stay.balance)}</span>
+                  <span className="text-destructive">
+                    {formatCurrency(stay.balance)}
+                  </span>
                 ) : (
                   <span className="text-muted-foreground">—</span>
                 )}
@@ -232,7 +255,7 @@ function StayTable({
         </TableBody>
       </Table>
     </div>
-  )
+  );
 }
 
 export function DailyReportSkeleton() {
@@ -245,5 +268,5 @@ export function DailyReportSkeleton() {
         </div>
       ))}
     </div>
-  )
+  );
 }

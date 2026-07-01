@@ -5,8 +5,6 @@ export function useActiveHotelRole() {
   const activeHotelId = useCurrentHotelStore((state) => state.activeHotelId);
   const { data: hotelAccess, isLoading } = useMyHotelAccess();
 
-  console.log("activeHotelId", activeHotelId, "hotelAccess", hotelAccess);
-
   const activeHotel = hotelAccess?.find(
     (item) => item.hotelId === activeHotelId,
   );

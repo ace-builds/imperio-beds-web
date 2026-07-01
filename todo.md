@@ -14,6 +14,8 @@ The desktop front-desk client's slice of [implementation.md](../implementation.m
 - [x] Hotel switcher UI
 - [x] Role-gated navigation (hide/disable modules the current role can't access)
 - [x] Staff Management screen (`/staff`, owner_admin only) — roster (name/avatar/role/phone/status/shift), search + role filter, invite-based "Add Staff Member" flow, edit role/phone/status, suspend/reactivate, on-duty toggle, remove, pending-invite rows with cancel (2026-07-01, shipped ahead of `implementation.md`'s original phasing)
+- [x] Payroll screen (`/payroll`, owner_admin + accountant) — month picker, stat cards (total/pending/paid/deductions), roster with base salary/adjustments/net payable/payment status, "Set Salary" and "Run Payroll" actions, per-entry payslip/edit dialog, quick "Pay" action, CSV export (2026-07-01, shipped immediately after Staff Management)
+- [x] Sidebar active nav item now highlighted with the primary color (`sidebar-primary` token) instead of the neutral `sidebar-accent` — the token already existed in `index.css` for this exact purpose but `ui/sidebar.tsx`'s `data-active` styling wasn't using it
 
 ## Phase 2 — Rooms & Room Types
 
@@ -62,4 +64,4 @@ The desktop front-desk client's slice of [implementation.md](../implementation.m
 
 ---
 
-Deferred post-MVP, not tracked here yet: full Attendance & Shift Tracking UI, Payroll & Salary Management screens. Staff Management shipped 2026-07-01 — see Phase 1 above.
+Deferred post-MVP, not tracked here yet: full Attendance & Shift Tracking UI. Staff Management and Payroll screens both shipped 2026-07-01 — see Phase 1 above.

@@ -106,7 +106,7 @@ function SignupPage() {
           <div className="flex size-9 items-center justify-center rounded-lg bg-white/15">
             <Building2 className="size-5" />
           </div>
-          <span className="text-lg font-bold">imperiobeds</span>
+          <span className="text-lg font-bold">ImperioBed</span>
         </div>
 
         <div className="flex flex-col gap-8">
@@ -140,7 +140,7 @@ function SignupPage() {
         </div>
 
         <p className="text-xs text-primary-foreground/60">
-          © 2025 imperiobeds. All rights reserved.
+          © 2025 ImperioBed. All rights reserved.
         </p>
       </div>
 

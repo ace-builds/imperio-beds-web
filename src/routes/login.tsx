@@ -85,7 +85,7 @@ function LoginPage() {
           <div className="flex size-9 items-center justify-center rounded-lg bg-white/15">
             <Building2 className="size-5" />
           </div>
-          <span className="text-lg font-bold">imperiobeds</span>
+          <span className="text-lg font-bold">ImperioBed</span>
         </div>
 
         <div className="flex flex-col gap-8">
@@ -94,8 +94,8 @@ function LoginPage() {
               Pick up today&apos;s hotel operations in one place.
             </h1>
             <p className="max-w-sm text-primary-foreground/75">
-              Sign in to review rooms, guests, staff activity, and daily
-              reports across your hotel business.
+              Sign in to review rooms, guests, staff activity, and daily reports
+              across your hotel business.
             </p>
           </div>
 
@@ -117,7 +117,7 @@ function LoginPage() {
         </div>
 
         <p className="text-xs text-primary-foreground/60">
-          © 2025 imperiobeds. All rights reserved.
+          © 2025 ImperioBed. All rights reserved.
         </p>
       </div>
 
@@ -129,8 +129,8 @@ function LoginPage() {
             </span>
             <h2 className="text-2xl font-bold">Sign in to your account</h2>
             <p className="text-sm text-muted-foreground">
-              Access your hotels, staff records, and daily operations from
-              where you left off.
+              Access your hotels, staff records, and daily operations from where
+              you left off.
             </p>
           </div>
 
@@ -214,15 +214,15 @@ function LoginPage() {
                 </Button>
 
                 <p className="text-center text-xs text-muted-foreground">
-                  Having trouble signing in? Contact your hotel owner or
-                  manager to confirm your account access.
+                  Having trouble signing in? Contact your hotel owner or manager
+                  to confirm your account access.
                 </p>
               </form>
             </CardContent>
           </Card>
 
           <p className="text-center text-sm text-muted-foreground">
-            New to imperiobeds?{" "}
+            New to ImperioBed?{" "}
             <Link
               to="/signup"
               search={{ redirect }}

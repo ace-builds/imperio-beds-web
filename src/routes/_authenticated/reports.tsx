@@ -2,7 +2,10 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Printer } from "lucide-react";
 import { AppTopbar } from "@/components/app-topbar";
-import { DailyReportSkeleton, DailyReportView } from "@/components/reports/daily-report";
+import {
+  DailyReportSkeleton,
+  DailyReportView,
+} from "@/components/reports/daily-report";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/date-picker";
 import { useDailyReport } from "@/hooks/use-reports";
@@ -46,7 +49,7 @@ function ReportsPage() {
         <div className="mb-6 hidden print:block">
           <h1 className="text-xl font-bold">Daily Operations Report</h1>
           <p className="text-sm text-muted-foreground">
-            {date.toLocaleDateString("en-US", {
+            {new Date(date).toLocaleDateString("en-US", {
               weekday: "long",
               year: "numeric",
               month: "long",

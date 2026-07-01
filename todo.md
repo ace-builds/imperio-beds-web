@@ -29,17 +29,18 @@ The desktop front-desk client's slice of [implementation.md](../implementation.m
 - [ ] Extend stay / move room flows
 - [ ] Check-out flow
 - [ ] Payment entry (cash/transfer/POS) + outstanding balance display
+- [ ] Reservations & events calendar — monthly/weekly view showing reservations, expected check-ins, expected check-outs, and room blocks; clicking an event opens the relevant detail panel
 
 ## Phase 4 — Inventory
 
-- [ ] Inventory item list per category
-- [ ] Stock-in / stock-out forms (reason + staff attribution)
-- [ ] Low-stock indicator/view
+- [x] Inventory item list per category
+- [x] Stock-in / stock-out forms (reason + staff attribution)
+- [x] Low-stock indicator/view
 
 ## Phase 5 — Reporting
 
-- [ ] Daily operations report screen (check-ins/outs, occupancy, revenue, inventory usage)
-- [ ] Printable/exportable view
+- [x] Daily operations report screen (check-ins/outs, occupancy, revenue, inventory usage)
+- [x] Printable/exportable view (browser print via Cmd+P / Ctrl+P)
 
 ## Phase 6 — Audit & Accountability
 

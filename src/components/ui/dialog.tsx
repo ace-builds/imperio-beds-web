@@ -51,6 +51,7 @@ function DialogContent({
   className,
   children,
   showCloseButton = true,
+  onInteractOutside,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
@@ -64,6 +65,24 @@ function DialogContent({
           "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-sm text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
+        onInteractOutside={(e) => {
+          // Let caller handle first so they can opt out of this guard.
+          onInteractOutside?.(e)
+          if (e.defaultPrevented) return
+
+          // Select/Popover/etc. render in separate Radix portals that live outside
+          // DialogContent in the DOM. Radix's DismissableLayer fires onInteractOutside
+          // for any click whose target is outside DialogContent — including clicks
+          // inside those portals. The only click that should genuinely close the
+          // dialog is one on our own backdrop overlay. Allow that; block everything else.
+          const target = (
+            (e as unknown as { detail?: { originalEvent?: { target?: unknown } } })
+              .detail?.originalEvent?.target
+          ) as Element | null
+          if (!target?.closest('[data-slot="dialog-overlay"]')) {
+            e.preventDefault()
+          }
+        }}
         {...props}
       >
         {children}

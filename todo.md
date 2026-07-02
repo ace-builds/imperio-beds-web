@@ -62,7 +62,7 @@ The desktop front-desk client's slice of [implementation.md](../implementation.m
 
 ## Testing
 
-- [ ] Add Vitest + Testing Library (`pnpm add -D vitest @testing-library/react jsdom`) once there's real component/hook logic worth testing
+- [ ] Add Vitest + Testing Library (`npm install -D vitest @testing-library/react jsdom`) once there's real component/hook logic worth testing
 
 ## Phase 10 — Attendance & Shift Tracking
 

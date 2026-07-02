@@ -45,6 +45,7 @@ The desktop front-desk client's slice of [implementation.md](../implementation.m
 
 - [x] Daily operations report screen (check-ins/outs, occupancy, revenue, inventory usage)
 - [x] Printable/exportable view (browser print via Cmd+P / Ctrl+P)
+- [x] Redesigned report screen: Today/Yesterday/This Week/This Month period tabs, revenue breakdown by payment method, room status snapshot bar, attendance issues card, inventory alerts card, Download PDF (reuses the browser print dialog's "Save as PDF" — no PDF-rendering dependency added)
 
 ## Phase 6 — Audit & Accountability
 
@@ -63,6 +64,15 @@ The desktop front-desk client's slice of [implementation.md](../implementation.m
 
 - [ ] Add Vitest + Testing Library (`pnpm add -D vitest @testing-library/react jsdom`) once there's real component/hook logic worth testing
 
+## Phase 10 — Attendance & Shift Tracking
+
+- [ ] Shift definition screen (create/edit morning/afternoon/night templates)
+- [ ] Shift assignment UI (assign a shift to a staff member for a given day)
+- [ ] Staff self clock-in/clock-out UI
+- [ ] Manual clock-entry correction UI (owner/manager, required reason)
+
+The report screen (Phase 5 above) already reads the daily report's `staffAttendance` field, but nothing in web can create the `Shift`/`ShiftAssignment` rows it depends on yet — so Attendance Issues/Staff On Duty show empty until this phase's UI exists (server API is done — see `imperio-beds-server/todo.md` Phase 10).
+
 ---
 
-Deferred post-MVP, not tracked here yet: full Attendance & Shift Tracking UI. Staff Management and Payroll screens both shipped 2026-07-01 — see Phase 1 above.
+Staff Management and Payroll screens both shipped 2026-07-01 — see Phase 1 above.

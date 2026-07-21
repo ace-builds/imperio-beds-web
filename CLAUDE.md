@@ -9,9 +9,18 @@ npm install      # install dependencies
 npm run dev      # vite dev server
 npm run build    # tsr generate && tsc -b && vite build
 npm run lint     # oxlint
+
+npm run desktop:dev    # tauri dev — same app in a native desktop window
+npm run desktop:build  # tauri build — produces a native installer/binary
 ```
 
 `src/routeTree.gen.ts` is auto-generated and gitignored. `dev` regenerates it via the TanStack Router Vite plugin as a side effect of starting the dev server. `build` can't rely on that: `tsc -b` runs before Vite ever starts, so on a fresh clone it would fail with "Cannot find module './routeTree.gen'" — the `build` script therefore runs `tsr generate` (the `@tanstack/router-cli` package, configured via `tsr.config.json`) first to produce the file explicitly before typechecking.
+
+## Desktop (Tauri)
+
+`src-tauri/` wraps this same Vite/React app in a native shell — there is no second frontend codebase to keep in sync. `desktop:dev` points Tauri's webview at the Vite dev server (`http://localhost:5179`); `desktop:build` points it at the static `dist/` output (`tauri.conf.json`'s `frontendDist`). Any component or page change under `src/` applies to both the browser build and the desktop build automatically, since they're the same source.
+
+Building/running the desktop target requires the Rust toolchain (`rustup`) plus platform build tools (Xcode Command Line Tools on macOS) — install those locally before `desktop:dev`/`desktop:build` will work; they aren't needed for `npm run dev`/`npm run build`. Native-only APIs (filesystem, OS window chrome, etc.) go through `@tauri-apps/api` and Tauri commands in `src-tauri/src/`, gated so the browser build degrades gracefully when `window.__TAURI__` isn't present — don't assume Tauri APIs are available in the plain browser build.
 
 ## Code practices
 

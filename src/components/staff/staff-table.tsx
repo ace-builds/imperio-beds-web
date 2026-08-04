@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Link } from '@tanstack/react-router'
 import {
   LogIn,
   LogOut,
@@ -22,7 +23,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from '@/components/ui/empty'
 import { Input } from '@/components/ui/input'
 import {
   Select,
@@ -42,7 +50,6 @@ import {
 } from '@/components/ui/table'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { ROLE_INFO, type InvitableRole } from '@/components/onboarding/constants'
-import { AddStaffDialog } from '@/components/staff/add-staff-dialog'
 import { EditStaffDialog } from '@/components/staff/edit-staff-dialog'
 import { StaffShiftBadge, StaffStatusBadge } from '@/components/staff/staff-badges'
 import { StaffStats } from '@/components/staff/staff-stats'
@@ -67,7 +74,6 @@ export function StaffTable({ hotelId, canManage }: { hotelId: string; canManage:
 
   const [search, setSearch] = useState('')
   const [roleFilter, setRoleFilter] = useState<InvitableRole | 'all'>('all')
-  const [addOpen, setAddOpen] = useState(false)
   const [editing, setEditing] = useState<HotelStaffWithUser | undefined>()
   const [removing, setRemoving] = useState<HotelStaffWithUser | null>(null)
   const [cancelling, setCancelling] = useState<{ id: string; email: string } | null>(null)
@@ -132,9 +138,11 @@ export function StaffTable({ hotelId, canManage }: { hotelId: string; canManage:
               </SelectContent>
             </Select>
             {canManage && (
-              <Button onClick={() => setAddOpen(true)}>
-                <Plus data-icon="inline-start" />
-                Add Staff Member
+              <Button asChild>
+                <Link to="/staff/invite">
+                  <Plus data-icon="inline-start" />
+                  Add Staff Member
+                </Link>
               </Button>
             )}
           </div>
@@ -175,6 +183,16 @@ export function StaffTable({ hotelId, canManage }: { hotelId: string; canManage:
                           : 'No staff match your search.'}
                       </EmptyDescription>
                     </EmptyHeader>
+                    {canManage && (
+                      <EmptyContent>
+                        <Button asChild>
+                          <Link to="/staff/invite">
+                            <Plus data-icon="inline-start" />
+                            Add Staff Member
+                          </Link>
+                        </Button>
+                      </EmptyContent>
+                    )}
                   </Empty>
                 </TableCell>
               </TableRow>
@@ -318,8 +336,6 @@ export function StaffTable({ hotelId, canManage }: { hotelId: string; canManage:
           </TableBody>
         </Table>
       </Card>
-
-      <AddStaffDialog open={addOpen} onOpenChange={setAddOpen} hotelId={hotelId} />
 
       <EditStaffDialog
         open={!!editing}

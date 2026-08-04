@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Eye, Pencil, Plus, Search } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -12,14 +13,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { GuestDetailSheet } from "@/components/guests/guest-detail-sheet";
-import { GuestFormDialog } from "@/components/guests/guest-form-dialog";
 import { GuestStatusBadge } from "@/components/guests/guest-status-badge";
 import {
   useGuest,
   useGuestsWithStats,
   type GuestWithStats,
 } from "@/hooks/use-guests";
-import type { Guest } from "@/lib/schemas/guest";
 
 const PAGE_SIZE = 10;
 
@@ -62,8 +61,6 @@ export function GuestsTable({
 }) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [formOpen, setFormOpen] = useState(false);
-  const [editing, setEditing] = useState<Guest | undefined>();
   const [viewingGuestId, setViewingGuestId] = useState<string | undefined>();
 
   const { data: guests, isLoading } = useGuestsWithStats(
@@ -97,14 +94,11 @@ export function GuestsTable({
             className="w-72 pl-8"
           />
         </div>
-        <Button
-          onClick={() => {
-            setEditing(undefined);
-            setFormOpen(true);
-          }}
-        >
-          <Plus data-icon="inline-start" />
-          Add New Guest
+        <Button asChild>
+          <Link to="/guests/new">
+            <Plus data-icon="inline-start" />
+            Add New Guest
+          </Link>
         </Button>
       </div>
 
@@ -179,15 +173,17 @@ export function GuestsTable({
                   </Button>
                   {canManage && (
                     <Button
+                      asChild
                       variant="ghost"
                       size="icon-sm"
-                      aria-label="Edit guest"
-                      onClick={() => {
-                        setEditing(guest);
-                        setFormOpen(true);
-                      }}
+                      aria-label={`Edit ${guest.name}`}
                     >
-                      <Pencil />
+                      <Link
+                        to="/guests/$guestId/edit"
+                        params={{ guestId: guest.id }}
+                      >
+                        <Pencil />
+                      </Link>
                     </Button>
                   )}
                 </TableCell>
@@ -220,13 +216,6 @@ export function GuestsTable({
           </Button>
         </div>
       </div>
-
-      <GuestFormDialog
-        open={formOpen}
-        onOpenChange={setFormOpen}
-        hotelId={hotelId}
-        guest={editing}
-      />
 
       <GuestDetailSheet
         open={!!viewingGuestId}

@@ -4,7 +4,7 @@ import { GuestsTable } from "@/components/guests/guests-table";
 import { useActiveHotelRole } from "@/hooks/use-active-hotel-role";
 import { useCurrentHotelStore } from "@/stores/current-hotel";
 
-export const Route = createFileRoute("/_authenticated/guests")({
+export const Route = createFileRoute("/_authenticated/guests/")({
   head: () => ({ meta: [{ title: "Guests — ImperioBed" }] }),
   component: GuestsPage,
 });

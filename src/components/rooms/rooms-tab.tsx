@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { Link } from '@tanstack/react-router'
 import { Pencil, Plus, Search, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -20,7 +21,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { ConfirmDialog } from '@/components/confirm-dialog'
-import { RoomFormDialog } from '@/components/rooms/room-form-dialog'
 import { RoomStats } from '@/components/rooms/room-stats'
 import { RoomStatusBadge } from '@/components/rooms/room-status-badge'
 import { useDeleteRoom, useRooms } from '@/hooks/use-rooms'
@@ -35,8 +35,6 @@ export function RoomsTab({ hotelId, canManage }: { hotelId: string; canManage: b
 
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<RoomStatus | 'all'>('all')
-  const [formOpen, setFormOpen] = useState(false)
-  const [editing, setEditing] = useState<RoomWithDetails | undefined>()
   const [deleting, setDeleting] = useState<RoomWithDetails | null>(null)
 
   const filteredRooms = useMemo(() => {
@@ -84,14 +82,11 @@ export function RoomsTab({ hotelId, canManage }: { hotelId: string; canManage: b
               </SelectContent>
             </Select>
             {canManage && (
-              <Button
-                onClick={() => {
-                  setEditing(undefined)
-                  setFormOpen(true)
-                }}
-              >
-                <Plus data-icon="inline-start" />
-                Add Room
+              <Button asChild>
+                <Link to="/rooms/new">
+                  <Plus data-icon="inline-start" />
+                  Add Room
+                </Link>
               </Button>
             )}
           </div>
@@ -139,20 +134,19 @@ export function RoomsTab({ hotelId, canManage }: { hotelId: string; canManage: b
                   {canManage && (
                     <TableCell className="text-right">
                       <Button
+                        asChild
                         variant="ghost"
                         size="icon-sm"
-                        aria-label="Edit room"
-                        onClick={() => {
-                          setEditing(room)
-                          setFormOpen(true)
-                        }}
+                        aria-label={`Edit room ${room.number}`}
                       >
-                        <Pencil />
+                        <Link to="/rooms/$roomId/edit" params={{ roomId: room.id }}>
+                          <Pencil />
+                        </Link>
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        aria-label="Delete room"
+                        aria-label={`Delete room ${room.number}`}
                         onClick={() => setDeleting(room)}
                       >
                         <Trash2 />
@@ -165,8 +159,6 @@ export function RoomsTab({ hotelId, canManage }: { hotelId: string; canManage: b
           </TableBody>
         </Table>
       </Card>
-
-      <RoomFormDialog open={formOpen} onOpenChange={setFormOpen} hotelId={hotelId} room={editing} />
 
       <ConfirmDialog
         open={!!deleting}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { format } from "date-fns";
 import {
   ArrowDownCircle,
@@ -24,6 +25,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Empty,
+  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyTitle,
@@ -63,7 +65,6 @@ import type {
   InventoryMovementType,
 } from "@/lib/schemas/inventory";
 import { InventoryCategoriesTab } from "./inventory-categories-tab";
-import { ItemFormDialog } from "./item-form-dialog";
 import { MovementHistorySheet } from "./movement-history-sheet";
 import { StockMovementDialog } from "./stock-movement-dialog";
 
@@ -113,10 +114,6 @@ export function InventoryItemsTable({
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [categoriesSheetOpen, setCategoriesSheetOpen] = useState(false);
-  const [itemDialog, setItemDialog] = useState<{
-    open: boolean;
-    item?: InventoryItem;
-  }>({ open: false });
   const [movementDialog, setMovementDialog] = useState<{
     open: boolean;
     item?: InventoryItem;
@@ -220,9 +217,17 @@ export function InventoryItemsTable({
             Audit Sheet
           </Button>
           {canManage && (
-            <Button onClick={() => setItemDialog({ open: true })}>
-              <Plus data-icon="inline-start" />
-              Add New Item
+            <Button asChild>
+              <Link
+                to="/inventory/items/new"
+                search={{
+                  categoryId:
+                    categoryFilter !== "all" ? categoryFilter : undefined,
+                }}
+              >
+                <Plus data-icon="inline-start" />
+                Add New Item
+              </Link>
             </Button>
           )}
         </div>
@@ -246,6 +251,16 @@ export function InventoryItemsTable({
                   : "No items have been added yet."}
             </EmptyDescription>
           </EmptyHeader>
+          {!items?.length && canManage && (
+            <EmptyContent>
+              <Button asChild>
+                <Link to="/inventory/items/new" search={{}}>
+                  <Plus data-icon="inline-start" />
+                  Add New Item
+                </Link>
+              </Button>
+            </EmptyContent>
+          )}
         </Empty>
       ) : (
         <div className="rounded-md border">
@@ -343,13 +358,14 @@ export function InventoryItemsTable({
                               {canManage && (
                                 <>
                                   {canStock && <DropdownMenuSeparator />}
-                                  <DropdownMenuItem
-                                    onClick={() =>
-                                      setItemDialog({ open: true, item })
-                                    }
-                                  >
-                                    <Pencil className="size-4" />
-                                    Edit
+                                  <DropdownMenuItem asChild>
+                                    <Link
+                                      to="/inventory/items/$itemId/edit"
+                                      params={{ itemId: item.id }}
+                                    >
+                                      <Pencil className="size-4" />
+                                      Edit
+                                    </Link>
                                   </DropdownMenuItem>
                                   <DropdownMenuItem
                                     className="text-destructive"
@@ -374,16 +390,6 @@ export function InventoryItemsTable({
           </Table>
         </div>
       )}
-
-      <ItemFormDialog
-        open={itemDialog.open}
-        onOpenChange={(open) => setItemDialog((s) => ({ ...s, open }))}
-        hotelId={hotelId}
-        item={itemDialog.item}
-        defaultCategoryId={
-          categoryFilter !== "all" ? categoryFilter : undefined
-        }
-      />
 
       {movementDialog.item && (
         <StockMovementDialog

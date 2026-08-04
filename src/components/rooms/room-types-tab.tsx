@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from '@tanstack/react-router'
 import { Pencil, Plus, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -11,7 +12,6 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { ConfirmDialog } from '@/components/confirm-dialog'
-import { RoomTypeFormDialog } from '@/components/rooms/room-type-form-dialog'
 import { useDeleteRoomType, useRoomTypes } from '@/hooks/use-room-types'
 import { useRooms } from '@/hooks/use-rooms'
 import { useActiveHotel } from '@/hooks/use-hotels'
@@ -24,8 +24,6 @@ export function RoomTypesTab({ hotelId, canManage }: { hotelId: string; canManag
   const { hotel } = useActiveHotel()
   const deleteRoomType = useDeleteRoomType(hotelId)
 
-  const [formOpen, setFormOpen] = useState(false)
-  const [editing, setEditing] = useState<RoomType | undefined>()
   const [deleting, setDeleting] = useState<RoomType | null>(null)
 
   const roomCountByType = new Map<string, number>()
@@ -43,14 +41,11 @@ export function RoomTypesTab({ hotelId, canManage }: { hotelId: string; canManag
           </p>
         </div>
         {canManage && (
-          <Button
-            onClick={() => {
-              setEditing(undefined)
-              setFormOpen(true)
-            }}
-          >
-            <Plus data-icon="inline-start" />
-            Add Room Type
+          <Button asChild>
+            <Link to="/rooms/types/new">
+              <Plus data-icon="inline-start" />
+              Add Room Type
+            </Link>
           </Button>
         )}
       </div>
@@ -92,20 +87,22 @@ export function RoomTypesTab({ hotelId, canManage }: { hotelId: string; canManag
               {canManage && (
                 <TableCell className="text-right">
                   <Button
+                    asChild
                     variant="ghost"
                     size="icon-sm"
-                    aria-label="Edit room type"
-                    onClick={() => {
-                      setEditing(roomType)
-                      setFormOpen(true)
-                    }}
+                    aria-label={`Edit ${roomType.name}`}
                   >
-                    <Pencil />
+                    <Link
+                      to="/rooms/types/$roomTypeId/edit"
+                      params={{ roomTypeId: roomType.id }}
+                    >
+                      <Pencil />
+                    </Link>
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon-sm"
-                    aria-label="Delete room type"
+                    aria-label={`Delete ${roomType.name}`}
                     onClick={() => setDeleting(roomType)}
                   >
                     <Trash2 />
@@ -116,13 +113,6 @@ export function RoomTypesTab({ hotelId, canManage }: { hotelId: string; canManag
           ))}
         </TableBody>
       </Table>
-
-      <RoomTypeFormDialog
-        open={formOpen}
-        onOpenChange={setFormOpen}
-        hotelId={hotelId}
-        roomType={editing}
-      />
 
       <ConfirmDialog
         open={!!deleting}

@@ -160,8 +160,12 @@ export function GuestPicker({
             {createGuest.isError && (
               <p className="px-1 text-xs text-destructive">{createGuest.error.message}</p>
             )}
+            {/* Explicit type="button": the picker now renders inside the
+                walk-in / reservation form pages, where an untyped button
+                would default to submitting that form. */}
             <div className="flex gap-2 pt-1">
               <Button
+                type="button"
                 variant="outline"
                 size="sm"
                 className="flex-1"
@@ -171,6 +175,7 @@ export function GuestPicker({
                 Back
               </Button>
               <Button
+                type="button"
                 size="sm"
                 className="flex-1"
                 onClick={submitCreateForm}

@@ -4,7 +4,7 @@ import { StaffTable } from "@/components/staff/staff-table";
 import { useActiveHotelRole } from "@/hooks/use-active-hotel-role";
 import { useCurrentHotelStore } from "@/stores/current-hotel";
 
-export const Route = createFileRoute("/_authenticated/staff")({
+export const Route = createFileRoute("/_authenticated/staff/")({
   head: () => ({ meta: [{ title: "Staff — ImperioBed" }] }),
   component: StaffPage,
 });

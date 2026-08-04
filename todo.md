@@ -56,6 +56,11 @@ The desktop front-desk client's slice of [implementation.md](../implementation.m
 - [ ] Verify RxDB replication survives offline/online transitions in a real browser — implemented (rooms/room-types/guests/stays collections + pull/push/resync wiring) and confirmed via `tsc -b`, lint, `vite build`, and a dev-server boot smoke test, but NOT yet exercised in an actual browser (devtools offline toggle, two-tab conflict scenario) — do this before shipping
 - [x] Conflict UI/handling per the resolution policy decided in `tech_stack.md` — no dedicated UI: the server performs the real field-level merge and returns the merged doc, RxDB's default conflict handler (master-always-wins) applies it client-side, so the client never needs to render a conflict-resolution prompt. A "your edit was overridden" toast is a deferred fast-follow, not built this pass
 
+## UX — Entity creation as pages, not modals
+
+- [x] Entity create/edit flows moved out of dialogs onto their own routes (2026-08-02): `/front-desk/check-in` (+ `?roomId=`), `/front-desk/reservations/new`, `/guests/new`, `/guests/$guestId/edit`, `/rooms/new`, `/rooms/$roomId/edit`, `/rooms/types/new`, `/rooms/types/$roomTypeId/edit`, `/inventory/items/new` (+ `?categoryId=`), `/inventory/items/$itemId/edit`, `/staff/invite`, `/hotels/new`. Shared shell in `components/form-page.tsx` (back link via `createLink`, grouped `FormSection` cards, sticky action bar, not-found state); booking pages gained a live `BookingSummary` aside (nights × rate, deposit, balance). The `/rooms` tab moved into a `?tab=` search param so returning from a form restores the right tab. Confirmations, quick row actions (stock in/out, add note, extend/move/payment), the inventory category form, and the staff edit form stay as dialogs — they're single-purpose tweaks on an already-visible record, not entity creation
+- [ ] Not exercised in a real browser yet — verified via `tsc -b`, `oxlint`, `vite build`, and a dev-server module-transform smoke test only
+
 ## Phase 9 — Deployment readiness
 
 - [ ] Production build + static hosting deploy

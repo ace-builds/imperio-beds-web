@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { AppTopbar } from "@/components/app-topbar";
 import { Button } from "@/components/ui/button";
 import { AddNoteDialog } from "@/components/front-desk/add-note-dialog";
 import { ExtendStayDialog } from "@/components/front-desk/extend-stay-dialog";
 import { MoveStayDialog } from "@/components/front-desk/move-stay-dialog";
-import { NewReservationDialog } from "@/components/front-desk/new-reservation-dialog";
-import { NewWalkInDialog } from "@/components/front-desk/new-walk-in-dialog";
 import { PaymentDialog } from "@/components/front-desk/payment-dialog";
 import { RoomBoard } from "@/components/front-desk/room-board";
 import { StayDetailSheet } from "@/components/front-desk/stay-detail-sheet";
@@ -17,17 +15,15 @@ import { useCurrentHotelStore } from "@/stores/current-hotel";
 import type { RoomWithDetails } from "@/lib/schemas/room";
 import type { StayWithGuestRoom } from "@/lib/schemas/stay";
 
-export const Route = createFileRoute("/_authenticated/front-desk")({
+export const Route = createFileRoute("/_authenticated/front-desk/")({
   head: () => ({ meta: [{ title: "Front Desk — ImperioBed" }] }),
   component: FrontDeskPage,
 });
 
 function FrontDeskPage() {
   const activeHotelId = useCurrentHotelStore((state) => state.activeHotelId);
+  const navigate = useNavigate();
 
-  const [walkInOpen, setWalkInOpen] = useState(false);
-  const [walkInRoomId, setWalkInRoomId] = useState<string | undefined>();
-  const [reservationOpen, setReservationOpen] = useState(false);
   const [viewStayId, setViewStayId] = useState<string | null>(null);
   const [extendOpen, setExtendOpen] = useState(false);
   const [moveOpen, setMoveOpen] = useState(false);
@@ -43,13 +39,12 @@ function FrontDeskPage() {
   const availableRooms = (rooms ?? []).filter(
     (room) => room.status === "available",
   );
-  const bookableRooms = (rooms ?? []).filter(
-    (room) => room.status !== "occupied",
-  );
 
+  // Checking in from a specific room card carries that room over as a search
+  // param, so the check-in page opens with it pre-selected — and the URL alone
+  // is enough to restore that state on a refresh or a shared link.
   function openWalkIn(roomId?: string) {
-    setWalkInRoomId(roomId);
-    setWalkInOpen(true);
+    void navigate({ to: "/front-desk/check-in", search: { roomId } });
   }
 
   function openStay(stay: StayWithGuestRoom) {
@@ -59,7 +54,9 @@ function FrontDeskPage() {
   return (
     <div className="flex flex-1 flex-col">
       <AppTopbar title="Front Desk Operations">
-        <Button onClick={() => openWalkIn()}>+ New Walk-in</Button>
+        <Button asChild>
+          <Link to="/front-desk/check-in">+ New Walk-in</Link>
+        </Button>
       </AppTopbar>
 
       <div className="grid gap-4 p-4 lg:grid-cols-[1fr_320px] lg:p-6">
@@ -72,28 +69,8 @@ function FrontDeskPage() {
           onAddNote={setNoteRoom}
         />
 
-        <TodaysLedger
-          hotelId={activeHotelId}
-          onViewStay={openStay}
-          onNewWalkIn={() => openWalkIn()}
-          onNewReservation={() => setReservationOpen(true)}
-        />
+        <TodaysLedger hotelId={activeHotelId} onViewStay={openStay} />
       </div>
-
-      <NewWalkInDialog
-        open={walkInOpen}
-        onOpenChange={setWalkInOpen}
-        hotelId={activeHotelId}
-        availableRooms={availableRooms}
-        initialRoomId={walkInRoomId}
-      />
-
-      <NewReservationDialog
-        open={reservationOpen}
-        onOpenChange={setReservationOpen}
-        hotelId={activeHotelId}
-        bookableRooms={bookableRooms}
-      />
 
       <StayDetailSheet
         open={!!viewStayId}

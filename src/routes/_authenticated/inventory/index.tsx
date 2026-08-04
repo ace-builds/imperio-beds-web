@@ -6,7 +6,7 @@ import { useActiveHotelRole } from "@/hooks/use-active-hotel-role";
 import { useActiveHotel } from "@/hooks/use-hotels";
 import { useCurrentHotelStore } from "@/stores/current-hotel";
 
-export const Route = createFileRoute("/_authenticated/inventory")({
+export const Route = createFileRoute("/_authenticated/inventory/")({
   head: () => ({ meta: [{ title: "Inventory — ImperioBed" }] }),
   component: InventoryPage,
 });

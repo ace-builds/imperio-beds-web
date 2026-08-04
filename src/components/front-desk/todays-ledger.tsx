@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -172,13 +173,9 @@ function InHouseList({
 export function TodaysLedger({
   hotelId,
   onViewStay,
-  onNewWalkIn,
-  onNewReservation,
 }: {
   hotelId: string
   onViewStay: (stay: StayWithGuestRoom) => void
-  onNewWalkIn: () => void
-  onNewReservation: () => void
 }) {
   return (
     <div className="flex flex-col gap-4">
@@ -197,8 +194,8 @@ export function TodaysLedger({
           <TabsContent value="arrivals">
             <ArrivalsList hotelId={hotelId} />
             <div className="px-4 pb-3">
-              <Button variant="outline" size="sm" className="w-full" onClick={onNewReservation}>
-                + New Reservation
+              <Button asChild variant="outline" size="sm" className="w-full">
+                <Link to="/front-desk/reservations/new">+ New Reservation</Link>
               </Button>
             </div>
           </TabsContent>
@@ -218,11 +215,11 @@ export function TodaysLedger({
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-2">
-          <Button variant="outline" className="justify-start" onClick={onNewWalkIn}>
-            New Walk-in
+          <Button asChild variant="outline" className="justify-start">
+            <Link to="/front-desk/check-in">New Walk-in</Link>
           </Button>
-          <Button variant="outline" className="justify-start" onClick={onNewReservation}>
-            New Reservation
+          <Button asChild variant="outline" className="justify-start">
+            <Link to="/front-desk/reservations/new">New Reservation</Link>
           </Button>
         </CardContent>
       </Card>

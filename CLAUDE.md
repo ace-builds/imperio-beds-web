@@ -22,6 +22,8 @@ npm run desktop:build  # tauri build — produces a native installer/binary
 
 Building/running the desktop target requires the Rust toolchain (`rustup`) plus platform build tools (Xcode Command Line Tools on macOS) — install those locally before `desktop:dev`/`desktop:build` will work; they aren't needed for `npm run dev`/`npm run build`. Native-only APIs (filesystem, OS window chrome, etc.) go through `@tauri-apps/api` and Tauri commands in `src-tauri/src/`, gated so the browser build degrades gracefully when `window.__TAURI__` isn't present — don't assume Tauri APIs are available in the plain browser build.
 
+**Auth differs between the two builds.** The browser build authenticates with BetterAuth's httpOnly session cookie; the desktop build can't (its packaged origin is `tauri://localhost`, which makes that cookie third-party, and WKWebView blocks third-party cookies) and uses a bearer token instead. `src/lib/auth-token.ts` owns that split — **every new request to the API must carry `authHeaders()`**, or it will work in the browser and 401 only in the packaged desktop app. In practice that means going through `lib/api/client.ts` (`apiFetch`), `lib/auth-client.ts`, or `connectSocket()` rather than calling `fetch`/`io()` directly.
+
 ## Code practices
 
 - **State, by layer — don't blur these:**

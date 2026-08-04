@@ -62,10 +62,18 @@ function LoginPage() {
 
   const loginMutation = useMutation({
     mutationFn: async () => {
+      // An unreachable API throws out of signIn rather than returning an
+      // `error`, and "fetch failed" isn't a useful thing to show a front-desk
+      // user — the first sign-in on a machine is the one flow that genuinely
+      // can't work offline, so say that.
       const { data, error } = await authClient.signIn.email({
         email,
         password,
         rememberMe,
+      }).catch(() => {
+        throw new Error(
+          "Can't reach the server. Check this computer's connection and try again.",
+        );
       });
       if (error) throw new Error(error.message ?? "Unable to sign in");
       return data;

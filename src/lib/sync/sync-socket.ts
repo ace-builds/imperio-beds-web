@@ -1,4 +1,4 @@
-import { socket } from '@/lib/socket'
+import { connectSocket, socket } from '@/lib/socket'
 
 export type SyncedCollection = 'rooms' | 'room-types' | 'guests' | 'stays'
 
@@ -21,6 +21,6 @@ export function onSyncChanged(collection: SyncedCollection, cb: () => void): () 
 }
 
 export function joinHotelForSync(hotelId: string) {
-  socket.connect()
+  connectSocket()
   socket.emit('joinHotel', { hotelId })
 }

@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { authClient } from '@/lib/auth-client'
+import { signOut } from '@/lib/session'
 
 function initials(name: string) {
   const parts = name.trim().split(/\s+/)
@@ -46,11 +46,12 @@ export function UserMenu() {
         <DropdownMenuGroup>
           <DropdownMenuItem
             variant="destructive"
-            onSelect={() =>
-              authClient.signOut({
-                fetchOptions: { onSuccess: () => navigate({ to: '/login' }) },
-              })
-            }
+            onSelect={async () => {
+              // Always leave for /login, even if the sign-out call failed —
+              // signOut() has already cleared the local session either way.
+              await signOut()
+              await navigate({ to: '/login' })
+            }}
           >
             <LogOut data-icon="inline-start" />
             Sign out

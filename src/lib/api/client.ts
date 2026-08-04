@@ -1,3 +1,5 @@
+import { authHeaders } from '@/lib/auth-token'
+
 type ApiFetchOptions = RequestInit & { hotelId?: string }
 
 export async function apiFetch<T>(path: string, options?: ApiFetchOptions): Promise<T> {
@@ -8,6 +10,9 @@ export async function apiFetch<T>(path: string, options?: ApiFetchOptions): Prom
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      // Empty in the browser build, where `credentials: 'include'` carries
+      // the session cookie instead — see lib/auth-token.ts.
+      ...authHeaders(),
       ...(hotelId ? { 'x-hotel-id': hotelId } : {}),
       ...headers,
     },
